@@ -1,0 +1,43 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "value": "canadacentral"
+        },
+        "policyAssignmentManagementGroupId": {
+            "value": [
+                "mg-rogersbank"
+            ]
+        },
+        "enforcementMode": {
+            "value": "Default"
+        },
+        "policyDefinitionName": {
+            "value": "Enable-Diagnostic-Log-to-Log-Analytics-Workspace"
+        },
+        "policyAssignmentName": {
+            "value": "Diagnostic-Log"
+        },
+        "policyAssignmentDisplayName": {
+            "value": "Enable Diagnostic Log to Log Analytics Workspace"
+        },
+        "workspaceName": {
+            "value": "platform-rb-events"
+        },
+        "workspaceRG": {
+            "value": "maz-cac-platform-law-rg"
+        },
+        "workspaceSubscriptionId": {
+            "value": "6c2e916a-e8dd-493e-87cc-43ad20cdd758"
+        },
+        "workspaceRGtags": {
+            "value": {
+                "Region": "canadacentral",
+                "Environment": "Production",
+                "ResourceType": "Log Analytics Workspace",
+                "ManagedBy": "Adastra Managed Services"
+            }
+        }
+    }
+}

@@ -1,0 +1,31 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "peerings": {
+            "value": [
+                {
+                    "sourceVnetRgName": "maz-cac-data-spk01-rg",
+                    "sourceVnetRgSubscriptionId": "83028b4f-eeda-4a23-a815-b977a510fe09",
+                    "sourceVnetName": "cac-npe-data-rb-vnet",
+                    "targetVnetRgName": "maz-cac-hub-rg",
+                    "targetVnetRgSubscriptionId": "6c2e916a-e8dd-493e-87cc-43ad20cdd758",
+                    "targetVnetName": "cac-npe-rb-vnet-hub",
+                    "targetGatewayTransit": false,
+                    "sourceGatewayTransit": true
+                },
+                {
+                    "sourceVnetRgName": "maz-cac-data-spk01-rg",
+                    "sourceVnetRgSubscriptionId": "83028b4f-eeda-4a23-a815-b977a510fe09",
+                    "sourceVnetName": "cac-prd-data-rb-vnet",
+                    "targetVnetRgName": "maz-cac-hub-rg",
+                    "targetVnetRgSubscriptionId": "6c2e916a-e8dd-493e-87cc-43ad20cdd758",
+                    "targetVnetName": "cac-prd-rb-vnet-hub",
+                    "targetGatewayTransit": false,
+                    "sourceGatewayTransit": true
+                }
+                
+            ]
+        }
+    }
+}

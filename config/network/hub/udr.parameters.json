@@ -1,0 +1,98 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "commonValues": {
+            "value": {
+                "subscriptionId": "40d16bb2-bcd6-4723-8749-ba2b0899f18a",
+                "subscriptionName": "Pay-As-You-Go",
+                "rgName": "maz-cac-prd-hub-rg",
+                "rgLocation": "canadacentral"
+            }
+        },
+        "udrs": {
+            "value": [
+                {
+                    "udrName": "udr-rba-hub-shared",
+                    "vnetName": "vnet-rba-hub-shared-001",
+                    "subnetName": "GatewaySubnet",
+                    "disableBgpRoutePropagation": true,
+                    "routes": [
+                        {
+                            "name": "route1",
+                            "properties": {
+                                "addressPrefix": "10.3.144.0/20",
+                                "nextHopType": "VirtualAppliance",
+                                "nextHopIpAddress": "10.3.12.10"
+                            }
+                        },
+                        {
+                            "name": "route2",
+                            "properties": {
+                                "addressPrefix": "10.3.176.0/20",
+                                "nextHopType": "VirtualAppliance",
+                                "nextHopIpAddress": "10.3.12.10"
+                            }
+                        },
+                        {
+                            "name": "route3",
+                            "properties": {
+                                "addressPrefix": "10.3.208.0/20",
+                                "nextHopType": "VirtualAppliance",
+                                "nextHopIpAddress": "10.3.12.10"
+                            }
+                        },
+                        {
+                            "name": "route4",
+                            "properties": {
+                                "addressPrefix": "10.3.224.0/20",
+                                "nextHopType": "VirtualAppliance",
+                                "nextHopIpAddress": "10.3.12.10"
+                            }
+                        },
+                        {
+                            "name": "route5",
+                            "properties": {
+                                "addressPrefix": "10.3.240.0/20",
+                                "nextHopType": "VirtualAppliance",
+                                "nextHopIpAddress": "10.3.12.10"
+                            }
+                        },
+                        {
+                            "name": "route6",
+                            "properties": {
+                                "addressPrefix": "10.3.48.0/20",
+                                "nextHopType": "VirtualAppliance",
+                                "nextHopIpAddress": "10.3.12.10"
+                            }
+                        },
+                        {
+                            "name": "route7",
+                            "properties": {
+                                "addressPrefix": "10.3.80.0/20",
+                                "nextHopType": "VirtualAppliance",
+                                "nextHopIpAddress": "10.3.12.10"
+                            }
+                        },
+                        {
+                            "name": "route8",
+                            "properties": {
+                                "addressPrefix": "10.3.112.0/20",
+                                "nextHopType": "VirtualAppliance",
+                                "nextHopIpAddress": "10.3.12.10"
+                            }
+                        },
+                        {
+                            "name": "route9",
+                            "properties": {
+                                "addressPrefix": "10.3.16.0/20",
+                                "nextHopType": "VirtualAppliance",
+                                "nextHopIpAddress": "10.3.4.10"
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}

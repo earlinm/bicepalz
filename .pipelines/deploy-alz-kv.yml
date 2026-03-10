@@ -1,0 +1,72 @@
+trigger: none
+
+pr: none
+
+parameters:
+  - name: env
+    type: string
+    values:
+      - Dev
+      - QA
+      - Prod
+
+variables:
+- template: ../config/common/common.yml
+
+stages:
+
+- stage: ValidateKV
+  displayName: Validate Key Vault
+
+  jobs:
+  - job: Bicep_Validation
+    displayName: Bicep Deployment Validation
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: AzureCLI@2
+      displayName: 'Bicep Main Templates Validation'
+      inputs:
+        azureSubscription: $(serviceConnection)
+        scriptType: bash
+        scriptLocation: inlineScript
+        workingDirectory: $(System.DefaultWorkingDirectory)/landingzone/
+        inlineScript: |
+          $(var-bashPreInjectScript)
+          echo "Validating templates for Landing Zone Key Vault Deployment - ${{ parameters.env }}"
+          az deployment sub validate --location $(deploymentRegion) --name 'validate-alz-kv-template' --template-file key-vault.bicep --parameters $(System.DefaultWorkingDirectory)/$(kvPathFromRoot)/${{ parameters.env }}/kv.parameters.json
+          $(var-bashPostInjectScript)
+    - task: AzureCLI@2
+      displayName: 'Get Bicep Main Template Deployment What-If Result'
+      inputs:
+        azureSubscription: $(serviceConnection)
+        scriptType: bash
+        scriptLocation: inlineScript
+        workingDirectory: $(System.DefaultWorkingDirectory)/landingzone/
+        inlineScript: |
+          $(var-bashPreInjectScript)
+          echo "Getting What-If result for Landing Zone Key Vault Deployment - ${{ parameters.env }}"
+          az deployment sub  what-if --location $(deploymentRegion) --name 'whatif-result-alz-ds-template' --template-file key-vault.bicep --parameters $(System.DefaultWorkingDirectory)/$(kvPathFromRoot)/${{ parameters.env }}/kv.parameters.json
+          $(var-bashPostInjectScript)
+
+- stage: DeployDS
+  displayName: Deploy Key Vault
+
+  jobs:
+  - job: DeployKVInTheEnvironment
+    displayName: Deploy Key Vault in the Environment
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: AzureCLI@2
+      displayName:  Deploy Key Vault
+      inputs:
+        azureSubscription: $(serviceConnection)
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
+        workingDirectory: $(System.DefaultWorkingDirectory)/landingzone/
+        inlineScript: |
+          $(var-bashPreInjectScript)
+          echo "Deploying Key Vault Resources for Landing Zone - ${{ parameters.env }}"
+          az deployment sub  create --location $(deploymentRegion) --name 'deploy-alz-kv' --template-file key-vault.bicep --parameters $(System.DefaultWorkingDirectory)/$(kvPathFromRoot)/${{ parameters.env }}/kv.parameters.json
+          $(var-bashPostInjectScript)

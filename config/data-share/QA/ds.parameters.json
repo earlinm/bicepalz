@@ -1,0 +1,46 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "dataShares": {
+            "value": [
+                {
+                    "subscriptionId": "3206b5bf-87f7-44f3-b055-a2d770947d2a",
+                    "rgName": "maz-cac-qa-rba-rg",
+                    "accountName": "cacqarbdshare01",
+                    "location": "canadacentral",
+                    "shares": [
+                        {
+                            "shareName": "maz-cac-qa-ds-01",
+                            "description": "This is QA Data Share 01",
+                            "kind": "CopyBased"
+                        },
+                        {
+                            "shareName": "maz-cac-qa-ds-02",
+                            "description": "This is QA Data Share 02",
+                            "kind": "InPlace"
+                        }
+                    ]
+                },
+                {
+                    "subscriptionId": "3206b5bf-87f7-44f3-b055-a2d770947d2a",
+                    "rgName": "maz-cac-qa-rba-rg",
+                    "accountName": "cacqarbdshare02",
+                    "location": "canadacentral",
+                    "shares": [
+                        {
+                            "shareName": "maz-cac-qa-ds-01",
+                            "description": "This is QA Data Share 01",
+                            "kind": "CopyBased"
+                        },
+                        {
+                            "shareName": "maz-cac-qa-ds-02",
+                            "description": "This is QA Data Share 02",
+                            "kind": "InPlace"
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}

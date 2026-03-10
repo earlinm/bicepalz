@@ -1,0 +1,56 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "resourceGroups": {
+            "value": [
+                {
+                    "name": "maz-cac-dev-spk01-rg",
+                    "subscriptionId": "bbb4cbb5-dc1f-4b45-a91e-e45db2c97ed2",
+                    "rgLocation": "canadacentral",
+                    "tags": {
+                        "Region": "canadacentral",
+                        "Environment": "Dev",
+                        "ResourceType": "Virtual Networks",
+                        "ManagedBy": "Adastra Managed Services"
+                    }
+                },
+                {
+                    "name": "maz-cac-dev-rba-rg",
+                    "subscriptionId": "bbb4cbb5-dc1f-4b45-a91e-e45db2c97ed2",
+                    "rgLocation": "canadacentral",
+                    "tags": {
+                        "Region": "canadacentral",
+                        "Environment": "Dev",
+                        "ResourceType": "Data analytics resources",
+                        "ManagedBy": "Adastra Managed Services"
+                    }
+                },
+                {
+                    "name": "maz-cac-qa-rba-rg",
+                    "subscriptionId": "3206b5bf-87f7-44f3-b055-a2d770947d2a",
+                    "rgLocation": "canadacentral",
+                    "tags": {
+                        "Region": "canadacentral",
+                        "Environment": "QA",
+                        "ResourceType": "Data analytics resources",
+                        "ManagedBy": "Adastra Managed Services"
+                    }
+                },
+                {
+                    "name": "maz-cac-data-vm-rg",
+                    "subscriptionId": "83028b4f-eeda-4a23-a815-b977a510fe09",
+                    "rgLocation": "canadacentral",
+                    "tags": {
+                        "Region": "canadacentral",
+                        "Environment": "DataMgt",
+                        "ResourceType": "Virtual Networks",
+                        "ManagedBy": "Adastra Managed Services"
+                    }
+                }
+
+                
+                ]
+        }
+    }
+}

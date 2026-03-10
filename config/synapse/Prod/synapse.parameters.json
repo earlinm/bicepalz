@@ -1,0 +1,33 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "synapseSQL": {
+            "value": [
+                {
+                    "subscriptionId": "aa50fb39-d6c4-4284-b776-5b8836667893",
+                    "rgName": "maz-cac-prd-rba-rg",
+                    "saName": "cacprdrbdlstraccsyn01",
+                    "blobName": "synapse",
+                    "blobRetentionDays": 180,
+                    "plhName": "mazcacprdsynapseplh",
+                    "location": "canadacentral",
+                    "workspaceName": "cac-prd-rb-rba-synw",
+                    "tags":{
+                        "Region": "canadacentral",
+                        "Environment": "Prod",
+                        "ResourceType": "Synapse",
+                        "ManagedBy": "Adastra Managed Services"
+                    },
+                    "managedRGName": "maz-cac-prd-rba-mrg",
+                    "sqlPoolName": "prdsqlpool",
+                    "sqlPoolSKUname": "DW400c",
+                    "aadAuthName": "az-sg-rb-synadmin",
+                    "aadAuthType": "Group",
+                    "aadAuthSID": "125d9f7b-4a09-407d-8ac1-2d720c44128e",
+                    "aadAuthTenantId": "a648e4e6-bd51-4e7a-b5c9-3f1eb5d589d8"
+                }
+            ]
+        }
+    }
+}

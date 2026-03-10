@@ -1,0 +1,61 @@
+trigger: none
+
+pr: none
+
+variables:
+- template: ../config/common/common.yml
+
+stages:
+
+- stage: ValidateResources
+  displayName: Validate Resources
+
+  jobs:
+  - job: Bicep_Validation
+    displayName: Bicep Deployment Validation
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: AzureCLI@2
+      displayName: 'Bicep Main Templates Validation'
+      inputs:
+        azureSubscription: $(serviceConnection)
+        scriptType: bash
+        scriptLocation: inlineScript
+        workingDirectory: $(System.DefaultWorkingDirectory)/$(roleAssignmentPathFromRoot)
+        inlineScript: |
+          $(var-bashPreInjectScript)
+          az deployment mg validate --management-group-id $(mgid) --location $(deploymentRegion) --name 'validate-role-assignment' --template-file $(System.DefaultWorkingDirectory)/landingzone/role-assignments.bicep --parameters ra.parameters.json
+          $(var-bashPostInjectScript)
+    - task: AzureCLI@2
+      displayName: 'Get Bicep Main Template Deployment What-If Result'
+      inputs:
+        azureSubscription: $(serviceConnection)
+        scriptType: bash
+        scriptLocation: inlineScript
+        workingDirectory: $(System.DefaultWorkingDirectory)/$(roleAssignmentPathFromRoot)
+        inlineScript: |
+          $(var-bashPreInjectScript)
+          az deployment mg what-if --management-group-id $(mgid) --location $(deploymentRegion) --name 'whatif-role-assignment' --template-file $(System.DefaultWorkingDirectory)/landingzone/role-assignments.bicep --parameters ra.parameters.json
+          $(var-bashPostInjectScript)
+
+- stage: DeployResources
+  displayName: Deploy Resources
+
+  jobs:
+  - job: DeployResourcesInTheEnvironment
+    displayName: Deploy Resources in the Environment
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: AzureCLI@2
+      displayName:  Deploy Role Assignments
+      inputs:
+        azureSubscription: $(serviceConnection)
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
+        workingDirectory: $(System.DefaultWorkingDirectory)/$(roleAssignmentPathFromRoot)
+        inlineScript: |
+          $(var-bashPreInjectScript)
+          az deployment mg create --management-group-id $(mgid) --location $(deploymentRegion) --name 'deploy-role-assignment' --template-file $(System.DefaultWorkingDirectory)/landingzone/role-assignments.bicep --parameters ra.parameters.json
+          $(var-bashPostInjectScript)

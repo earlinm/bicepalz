@@ -1,0 +1,26 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "peerings": {
+            "value": [
+                {
+                    "sourceVnetRgName": "maz-cac-prd-hub-rg",
+                    "sourceVnetRgSubscriptionId": "40d16bb2-bcd6-4723-8749-ba2b0899f18a",
+                    "sourceVnetName": "vnet-rba-hub-shared-001",
+                    "targetVnetRgName": "maz-cac-prd-hub-rg",
+                    "targetVnetRgSubscriptionId": "40d16bb2-bcd6-4723-8749-ba2b0899f18a",
+                    "targetVnetName": "vnet-rba-hub-dev-001"
+                },
+                {
+                    "sourceVnetRgName": "maz-cac-prd-hub-rg",
+                    "sourceVnetRgSubscriptionId": "40d16bb2-bcd6-4723-8749-ba2b0899f18a",
+                    "sourceVnetName": "vnet-rba-hub-shared-001",
+                    "targetVnetRgName": "maz-cac-prd-hub-rg",
+                    "targetVnetRgSubscriptionId": "40d16bb2-bcd6-4723-8749-ba2b0899f18a",
+                    "targetVnetName": "vnet-rba-hub-prod-001"
+                }
+            ]
+        }
+    }
+}

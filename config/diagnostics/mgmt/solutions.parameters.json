@@ -1,0 +1,34 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "value": "canadacentral"
+        },
+        "automationSolutions": {
+            "value": [
+                {
+                    "rgName": "maz-cac-platform-law-rg",
+                    "subscriptionId": "6c2e916a-e8dd-493e-87cc-43ad20cdd758",
+                    "automationAccountName": "aa-rba-mgmt",
+                    "sku": "Basic",
+                    "lawName": "platform-rb-events",
+                    "solutionsList": [
+                        "AgentHealthAssessment",
+                        "AntiMalware",
+                        "AzureActivity",
+                        "ChangeTracking",
+                        "Security",
+                        "SecurityInsights",
+                        "ServiceMap",
+                        "SQLAdvancedThreatProtection",
+                        "SQLAssessment",
+                        "SQLVulnerabilityAssessment",
+                        "Updates",
+                        "VMInsights"
+                    ]
+                }
+            ]
+        }
+    }
+}

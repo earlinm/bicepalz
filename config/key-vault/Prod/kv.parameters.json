@@ -1,0 +1,19 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "keyVaults": {
+            "value": [
+                {
+                    "subscriptionId": "aa50fb39-d6c4-4284-b776-5b8836667893",
+                    "rgName": "maz-cac-prd-rba-rg",
+                    "kvName": "maz-cac-prd-acc-kv",
+                    "location": "canadacentral",
+                    "skuName": "Standard",
+                    "accessPoliciesSecretsPermissions": ["All"],
+                    "accessPoliciesprincipalId": "01154c9f-c774-48ac-b761-6ac1a0b4a44b"
+                }
+            ]
+        }
+    }
+}

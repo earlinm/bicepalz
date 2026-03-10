@@ -1,0 +1,30 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "virtualMachines": {
+            "value": [
+                {
+                    "subscriptionId": "0f57e2fc-8936-4dbb-89b5-9319c7561238",
+                    "rgName": "maz-cac-dev-vm-rg",
+                    "location": "canadacentral",
+                    "tags":{
+                        "Region": "canadacentral",
+                        "Environment": "Dev",
+                        "ResourceType": "Virtual Machine",
+                        "ManagedBy": "Adastra Managed Services"
+                    },
+                    "vnetRGname": "maz-cac-dev-rg",
+                    "virtualNetworkName": "vnet-rba-dev-001",
+                    "subnetName": "snet-dev-resource-001",
+                    "nicName": "maz-cac-dev-vm-nic-001",
+                    "vmName": "devvm001",
+                    "vmSize": "Standard_B2s",
+                    "osVersion": "2022-datacenter-azure-edition",
+                    "saType": "StandardSSD_LRS",
+                    "dataDiskName": "devvmdd001"
+                }
+            ]
+        }
+    }
+}

@@ -1,0 +1,50 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "commonValues": {
+            "value": {
+                "subscriptionId": "3206b5bf-87f7-44f3-b055-a2d770947d2a",
+                "subscriptionName": "rogersbank-qa",
+                "rgName": "maz-cac-qa-spk01-rg",
+                "rgLocation": "canadacentral",
+                "tags": {
+                    "Region": "canadacentral",
+                    "Environment": "QA",
+                    "ResourceType": "Virtual Networks",
+                    "ManagedBy": "Adastra Managed Services"
+            }
+            }
+        },
+        "vnets": {
+            "value": [
+                {
+                    "vnetName": "cac-qa-rb-vnet",
+                    "vnetAddress": "10.5.0.0/16",
+                    "enableDdosProtection": false,
+                    "subnets": [
+                        {
+                            "name": "snet-qa-web",
+                            "properties": {
+                                "addressPrefix": "10.5.0.0/24"
+                            }
+                        },
+                        {
+                            "name": "snet-qa-app",
+                            "properties": {
+                                "addressPrefix": "10.5.1.0/24"
+                            }
+                        },
+                        {
+                            "name": "snet-qa-db",
+                            "properties": {
+                                "addressPrefix": "10.5.2.0/24"
+                            }
+                        }
+                        
+                    ]
+                }
+            ]
+        }
+    }
+}

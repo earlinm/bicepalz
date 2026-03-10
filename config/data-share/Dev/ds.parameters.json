@@ -1,0 +1,46 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "dataShares": {
+            "value": [
+                {
+                    "subscriptionId": "bbb4cbb5-dc1f-4b45-a91e-e45db2c97ed2",
+                    "rgName": "maz-cac-dev-rba-rg",
+                    "accountName": "cacdevrbdshare01",
+                    "location": "canadacentral",
+                    "shares": [
+                        {
+                            "shareName": "maz-cac-dev-ds-01",
+                            "description": "This is Dev Data Share 01",
+                            "kind": "CopyBased"
+                        },
+                        {
+                            "shareName": "maz-cac-dev-ds-02",
+                            "description": "This is Dev Data Share 02",
+                            "kind": "InPlace"
+                        }
+                    ]
+                },
+                {
+                    "subscriptionId": "bbb4cbb5-dc1f-4b45-a91e-e45db2c97ed2",
+                    "rgName": "maz-cac-dev-rba-rg",
+                    "accountName": "cacdevrbdshare02",
+                    "location": "canadacentral",
+                    "shares": [
+                        {
+                            "shareName": "maz-cac-dev-ds-01",
+                            "description": "This is Dev Data Share 01",
+                            "kind": "CopyBased"
+                        },
+                        {
+                            "shareName": "maz-cac-dev-ds-02",
+                            "description": "This is Dev Data Share 02",
+                            "kind": "InPlace"
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}

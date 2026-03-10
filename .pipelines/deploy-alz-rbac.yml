@@ -1,0 +1,61 @@
+trigger: none
+
+pr: none
+
+variables:
+- template: ../config/common/common.yml
+
+stages:
+
+- stage: ValidateRBACResources
+  displayName: Validate RBAC Resources
+
+  jobs:
+  - job: Bicep_Validation
+    displayName: Bicep RBAC Validation
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: AzureCLI@2
+      displayName: 'Bicep Main Templates Validation'
+      inputs:
+        azureSubscription: $(serviceConnection)
+        scriptType: bash
+        scriptLocation: inlineScript
+        workingDirectory: $(System.DefaultWorkingDirectory)/rbac
+        inlineScript: |
+          $(var-bashPreInjectScript)
+          az deployment mg validate --management-group-id $(mgid) --location $(deploymentRegion) --name 'validate-rbac' --template-file rbac.bicep --parameters $(System.DefaultWorkingDirectory)/$(rbacPathFromRoot)/rbac.parameters.json
+          $(var-bashPostInjectScript)
+    - task: AzureCLI@2
+      displayName: 'Get Bicep Main Template Deployment What-If Result'
+      inputs:
+        azureSubscription: $(serviceConnection)
+        scriptType: bash
+        scriptLocation: inlineScript
+        workingDirectory: $(System.DefaultWorkingDirectory)/rbac
+        inlineScript: |
+          $(var-bashPreInjectScript)
+          az deployment mg what-if --management-group-id $(mgid) --location $(deploymentRegion) --name 'whatif-rbac' --template-file rbac.bicep --parameters $(System.DefaultWorkingDirectory)/$(rbacPathFromRoot)/rbac.parameters.json
+          $(var-bashPostInjectScript)
+
+- stage: DeployRBACResources
+  displayName: Deploy RBAC Resources
+
+  jobs:
+  - job: DeployRBACInTheEnvironment
+    displayName: Deploy RBAC in the Environment
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: AzureCLI@2
+      displayName:  Deploy RBAC
+      inputs:
+        azureSubscription: $(serviceConnection)
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
+        workingDirectory: $(System.DefaultWorkingDirectory)/rbac
+        inlineScript: |
+          $(var-bashPreInjectScript)
+          az deployment mg create --management-group-id $(mgid) --location $(deploymentRegion) --name 'deploy-rbac' --template-file rbac.bicep --parameters $(System.DefaultWorkingDirectory)/$(rbacPathFromRoot)/rbac.parameters.json
+          $(var-bashPostInjectScript)

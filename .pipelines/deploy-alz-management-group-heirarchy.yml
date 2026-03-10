@@ -1,0 +1,64 @@
+trigger: none
+
+pr: none
+
+variables:
+- template: ../config/common/common.yml
+
+stages:
+
+- stage: ValidateResources
+  displayName: Validate Resources
+
+  jobs:
+  - job: Bicep_Validation
+    displayName: Bicep Deployment Validation
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: AzureCLI@2
+      displayName: 'Bicep Main Templates Validation'
+      inputs:
+        azureSubscription: $(serviceConnection)
+        scriptType: bash
+        scriptLocation: inlineScript
+        workingDirectory: $(System.DefaultWorkingDirectory)/$(managementGroupPathFromRoot)
+        #az deployment mg validate --management-group-id $(mgid) --location $(deploymentRegion) --name 'validate-result-alz-mg' --template-file $(System.DefaultWorkingDirectory)/landingzone/management-group.bicep --parameters mg.parameters.json
+        inlineScript: |
+          $(var-bashPreInjectScript)
+          az deployment mg validate --management-group-id 'mytestmg' --location $(deploymentRegion) --name 'validate-result-alz-mg' --template-file $(System.DefaultWorkingDirectory)/landingzone/management-group.bicep --parameters mg.parameters.json
+          $(var-bashPostInjectScript)
+    - task: AzureCLI@2
+      displayName: 'Get Bicep Main Template Deployment What-If Result'
+      inputs:
+        azureSubscription: $(serviceConnection)
+        scriptType: bash
+        scriptLocation: inlineScript
+        workingDirectory: $(System.DefaultWorkingDirectory)/$(managementGroupPathFromRoot)
+        # az deployment mg what-if --management-group-id $(mgid) --location $(deploymentRegion) --name 'whatif-result-alz-mg' --template-file $(System.DefaultWorkingDirectory)/landingzone/management-group.bicep --parameters mg.parameters.json
+        inlineScript: |
+          $(var-bashPreInjectScript)
+          az deployment mg what-if --management-group-id 'mytestmg' --location $(deploymentRegion) --name 'whatif-result-alz-mg' --template-file $(System.DefaultWorkingDirectory)/landingzone/management-group.bicep --parameters mg.parameters.json
+          $(var-bashPostInjectScript)
+
+- stage: DeployResources
+  displayName: Deploy Resources
+
+  jobs:
+  - job: DeployResourcesInTheEnvironment
+    displayName: Deploy Resources in the Environment
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: AzureCLI@2
+      displayName:  Deploy Management Groups
+      inputs:
+        azureSubscription: $(serviceConnection)
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
+        workingDirectory: $(System.DefaultWorkingDirectory)/$(managementGroupPathFromRoot)
+        #az deployment mg create --management-group-id $(mgid) --location $(deploymentRegion) --name 'deploy-alz-mg' --template-file $(System.DefaultWorkingDirectory)/landingzone/management-group.bicep --parameters mg.parameters.json
+        inlineScript: |
+          $(var-bashPreInjectScript)
+          az deployment mg create --management-group-id 'mytestmg' --location $(deploymentRegion) --name 'deploy-alz-mg' --template-file $(System.DefaultWorkingDirectory)/landingzone/management-group.bicep --parameters mg.parameters.json
+          $(var-bashPostInjectScript)

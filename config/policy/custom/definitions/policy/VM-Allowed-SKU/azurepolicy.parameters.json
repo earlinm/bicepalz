@@ -1,0 +1,23 @@
+{
+    "allowedVMsku": {
+        "type": "Array",
+        "metadata": {
+            "displayName": "Allowed VM SKU Type",
+            "description": "List of VM SKU type"
+        }
+    },
+    "effect": {
+        "type": "String",
+        "metadata": {
+            "displayName": "Policy Effect",
+            "description": "The desired effect of the policy."
+        },
+        "allowedValues": [
+            "audit",
+            "Audit",
+            "deny",
+            "Deny"
+        ],
+        "defaultValue": "audit"
+    }
+}

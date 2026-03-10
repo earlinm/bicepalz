@@ -1,0 +1,35 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "resourceGroups": {
+            "value": [
+                {
+                    "name": "maz-cac-prod-spk01-rg",
+                    "subscriptionId": "aa50fb39-d6c4-4284-b776-5b8836667893",
+                    "rgLocation": "canadacentral",
+                    "tags": {
+                        "Region": "canadacentral",
+                        "Environment": "Prod",
+                        "ResourceType": "Virtual Networks",
+                        "ManagedBy": "Adastra Managed Services"
+                    }
+                },
+                {
+                    "name": "maz-cac-prd-rba-rg",
+                    "subscriptionId": "aa50fb39-d6c4-4284-b776-5b8836667893",
+                    "rgLocation": "canadacentral",
+                    "tags": {
+                        "Region": "canadacentral",
+                        "Environment": "Prod",
+                        "ResourceType": "Data analytics resources",
+                        "ManagedBy": "Adastra Managed Services"
+                    }
+                }
+                
+
+                
+                ]
+        }
+    }
+}

@@ -1,0 +1,64 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "commonValues": {
+            "value": {
+                "subscriptionId": "83028b4f-eeda-4a23-a815-b977a510fe09",
+                "subscriptionName": "rb-datamgt",
+                "rgName": "maz-cac-data-spk01-rg",
+                "rgLocation": "canadacentral",
+                "tags": {
+                        "Region": "canadacentral",
+                        "Environment": "dataMgt",
+                        "ResourceType": "Virtual Networks",
+                        "ManagedBy": "Adastra Managed Services"
+                }
+            }
+        },
+          "vnets": {
+            "value": [
+                {
+                    "vnetName": "cac-npe-data-rb-vnet",
+                    "vnetAddress": "10.2.0.0/16",
+                    "enableDdosProtection": false,
+                    "subnets": [
+                        {
+                            "name": "snet-data-app",
+                            "properties": {
+                                "addressPrefix": "10.2.1.0/24"
+                            }
+                        },
+                        {
+                            "name": "snet-data-db",
+                            "properties": {
+                                "addressPrefix": "10.2.2.0/24"
+                            }
+                        }
+                        
+                    ]
+                },
+                {
+                    "vnetName": "cac-prd-data-rb-vnet",
+                    "vnetAddress": "10.3.0.0/16",
+                    "enableDdosProtection": false,
+                    "subnets": [
+                        {
+                            "name": "snet-data-app",
+                            "properties": {
+                                "addressPrefix": "10.3.1.0/24"
+                            }
+                        },
+                        {
+                            "name": "snet-data-db",
+                            "properties": {
+                                "addressPrefix": "10.3.2.0/24"
+                            }
+                        }
+                        
+                    ]
+                }
+            ]
+        }
+    }
+}

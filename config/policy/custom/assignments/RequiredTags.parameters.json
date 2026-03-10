@@ -1,0 +1,38 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "value": "canadacentral"
+        },
+        "policyAssignmentManagementGroupId": {
+            "value": [
+                "mg-rogersbank"
+            ]
+        },
+        "enforcementMode": {
+            "value": "Default"
+        },
+        "policyDefinitionName": {
+            "value": "Audit-Missing-Tags-on-resource-groups"
+        },
+        "policyAssignmentName": {
+            "value": "Missing-Tags-on-RG"
+        },
+        "policyAssignmentDisplayName": {
+            "value": "Audit Missing Tags on resource groups"
+        },
+        "regionNonCompliantMessage": {
+            "value": "You require a Region tag"
+        },
+        "environmentNonCompliantMessage": {
+            "value": "You require an Environment tag"
+        },
+        "resourcetypeNonCompliantMessage": {
+            "value": "You require a ManagedBy tag"
+        },
+        "managedbyNonCompliantMessage": {
+            "value": "You require a ResourceType tag"
+        }
+    }
+}

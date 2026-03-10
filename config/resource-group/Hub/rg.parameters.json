@@ -1,0 +1,23 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "resourceGroups": {
+            "value": [
+                {
+                    "name": "maz-cac-hub-rg",
+                    "subscriptionId": "6c2e916a-e8dd-493e-87cc-43ad20cdd758",
+                    "rgLocation": "canadacentral",
+                    "tags": {
+                        "Region": "canadacentral",
+                        "Environment": "Prod",
+                        "ResourceType": "Virtual Networks",
+                        "ManagedBy": "Adastra Managed Services"
+                    }
+                }
+
+                
+                ]
+        }
+    }
+}

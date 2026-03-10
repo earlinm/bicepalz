@@ -1,0 +1,110 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "commonValues": {
+            "value": {
+                "subscriptionId": "6c2e916a-e8dd-493e-87cc-43ad20cdd758",
+                "subscriptionName": "rb-platform",
+                "rgName": "maz-cac-hub-rg",
+                "rgLocation": "canadacentral",
+                "tags": {
+                    "Region": "canadacentral",
+                    "Environment": "Prod",
+                    "ResourceType": "Virtual Networks",
+                    "ManagedBy": "Adastra Managed Services"
+            }
+            }
+        },
+        "vnets": {
+            "value": [
+                {
+                    "vnetName": "cac-npe-rb-vnet-hub",
+                    "vnetAddress": "10.4.0.0/16",
+                    "enableDdosProtection": false,
+                    "subnets": [
+                        {
+                            "name": "AzureBastionSubnet",
+                            "properties": {
+                                "addressPrefix": "10.4.0.0/24"
+                            }
+                        },
+                        {
+                            "name": "AzureFirewallSubnet",
+                            "properties": {
+                                "addressPrefix": "10.4.1.0/24"
+                            }
+                        },
+                        {
+                            "name": "cac-npe-rb-pve-st",
+                            "properties": {
+                                "addressPrefix": "10.4.2.0/24"
+                            }
+                        },
+                        {
+                            "name": "cac-npe-rb-pve-kv",
+                            "properties": {
+                                "addressPrefix": "10.4.3.0/24"
+                            }
+                        },
+                        {
+                            "name": "cac-npe-rb-pve-synw",
+                            "properties": {
+                                "addressPrefix": "10.4.4.0/24"
+                            }
+                        },
+                        {
+                            "name": "GatewaySubnet",
+                            "properties": {
+                                "addressPrefix": "10.4.5.0/24"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "vnetName": "cac-prd-rb-vnet-hub",
+                    "vnetAddress": "10.0.0.0/16",
+                    "enableDdosProtection": false,
+                    "subnets": [
+                        {
+                            "name": "AzureBastionSubnet",
+                            "properties": {
+                                "addressPrefix": "10.0.0.0/24"
+                            }
+                        },
+                        {
+                            "name": "AzureFirewallSubnet",
+                            "properties": {
+                                "addressPrefix": "10.0.1.0/24"
+                            }
+                        },
+                        {
+                            "name": "cac-prd-rb-pve-st",
+                            "properties": {
+                                "addressPrefix": "10.0.2.0/24"
+                            }
+                        },
+                        {
+                            "name": "cac-prd-rb-pve-kv",
+                            "properties": {
+                                "addressPrefix": "10.0.3.0/24"
+                            }
+                        },
+                        {
+                            "name": "cac-prd-rb-pve-synw",
+                            "properties": {
+                                "addressPrefix": "10.0.4.0/24"
+                            }
+                        },
+                        {
+                            "name": "GatewaySubnet",
+                            "properties": {
+                                "addressPrefix": "10.0.5.0/24"
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}

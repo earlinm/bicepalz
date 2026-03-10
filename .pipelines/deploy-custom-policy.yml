@@ -1,0 +1,166 @@
+trigger: none
+
+pr: none
+
+variables:
+- template: ../config/common/common.yml
+
+stages:
+
+- stage: deployCustomPolicyDefinition
+  displayName: Deploy Custom Policy Definition
+
+  jobs:
+  - job: DeployCustomPolicyDefinition
+    displayName: Deploy Custom Policy Definition
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: AzureCLI@2
+      displayName: 'Deploy Custom Policy Definition'
+      inputs:
+        azureSubscription: $(serviceConnection)
+        scriptType: bash
+        scriptLocation: inlineScript
+        workingDirectory: $(System.DefaultWorkingDirectory)/$(customPolicyPathFromRoot)/definitions/policy
+        inlineScript: |
+          $(var-bashPreInjectScript)
+          for defn in `ls -d */`
+          do
+            for scopes in `cat $defn/scope.json | jq -r '.scope[]'`
+            do
+              echo "Deploy Custom Policy Definitions $defn in scope $scopes"
+              name=`jq -r .name $defn'azurepolicy.config.json'`
+              mode=`jq -r .mode $defn'azurepolicy.config.json'`
+              az policy definition create -n $defn --display-name "$name" --mode "$mode" --rules @$defn'azurepolicy.rules.json' --params @$defn'azurepolicy.parameters.json' --management-group $scopes
+            done
+          done
+          $(var-bashPostInjectScript)
+
+- stage: deployCustomPolicySetDefinition
+  displayName: Deploy Custom Policy Set Definition
+
+  jobs:
+  - job: DeployCustomPolicyDefinitionSet
+    displayName: Deploy Custom Policy Set Definition
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: AzureCLI@2
+      displayName: 'Bicep Main Templates Validation'
+      inputs:
+        azureSubscription: $(serviceConnection)
+        scriptType: bash
+        scriptLocation: inlineScript
+        workingDirectory: $(System.DefaultWorkingDirectory)/policy/custom/policyset/
+        inlineScript: |
+          $(var-bashPreInjectScript)
+          for defSet in `ls | cut -d "." -f 1`
+          do
+            for scopes in `cat $(System.DefaultWorkingDirectory)/$(customPolicyPathFromRoot)/definitions/policyset/$defSet.parameters.json | jq -r '.parameters.policyAssignmentManagementGroupId.value[]'`
+            do
+              echo "Validating templates for Policy Set Definition $defSet in scope $scopes"
+              az deployment mg validate --management-group-id $scopes --location $(deploymentRegion) --name 'validate-custom-policy-set-definition-template' --template-file $defSet.bicep --parameters $(System.DefaultWorkingDirectory)/$(customPolicyPathFromRoot)/definitions/policyset/$defSet.parameters.json --parameters mgid=$scopes
+            done
+          done
+          $(var-bashPostInjectScript)
+    - task: AzureCLI@2
+      displayName: 'Get Bicep Main Template Deployment What-If Result'
+      inputs:
+        azureSubscription: $(serviceConnection)
+        scriptType: bash
+        scriptLocation: inlineScript
+        workingDirectory: $(System.DefaultWorkingDirectory)/policy/custom/policyset/
+        inlineScript: |
+          $(var-bashPreInjectScript)
+          for defSet in `ls | cut -d "." -f 1`
+          do
+            for scopes in `cat $(System.DefaultWorkingDirectory)/$(customPolicyPathFromRoot)/definitions/policyset/$defSet.parameters.json | jq -r '.parameters.policyAssignmentManagementGroupId.value[]'`
+            do
+              echo "Getting What-If result for for Policy Set Definitions $defSet in scope $scopes"
+              az deployment mg what-if --management-group-id $scopes --location $(deploymentRegion) --name 'whatif-custom-policy-set-definition-template' --template-file $defSet.bicep --parameters $(System.DefaultWorkingDirectory)/$(customPolicyPathFromRoot)/definitions/policyset/$defSet.parameters.json --parameters mgid=$scopes
+            done
+          done
+          $(var-bashPostInjectScript)
+    - task: AzureCLI@2
+      displayName: Deploy Custom Policy Set Definition
+      inputs:
+        azureSubscription: $(serviceConnection)
+        scriptType: bash
+        scriptLocation: inlineScript
+        workingDirectory: $(System.DefaultWorkingDirectory)/policy/custom/policyset/
+        inlineScript: |
+          $(var-bashPreInjectScript)
+          for defSet in `ls | cut -d "." -f 1`
+          do
+            for scopes in `cat $(System.DefaultWorkingDirectory)/$(customPolicyPathFromRoot)/definitions/policyset/$defSet.parameters.json | jq -r '.parameters.policyAssignmentManagementGroupId.value[]'`
+            do
+              echo "Deploy Custom Policy Set Definition $defSet in scope $scopes"
+              az deployment mg create --management-group-id $scopes --location $(deploymentRegion) --name 'deploy-custom-policy-set-definition' --template-file $defSet.bicep --parameters $(System.DefaultWorkingDirectory)/$(customPolicyPathFromRoot)/definitions/policyset/$defSet.parameters.json --parameters mgid=$scopes
+            done
+          done
+          $(var-bashPostInjectScript)
+
+- stage: AssignPolicy
+  displayName: Assign Custom Policy
+
+  jobs:
+  - job: AssignCustomPolicy
+    displayName: Assign Custom Policy
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: AzureCLI@2
+      displayName: 'Bicep Main Templates Validation'
+      inputs:
+        azureSubscription: $(serviceConnection)
+        scriptType: bash
+        scriptLocation: inlineScript
+        workingDirectory: $(System.DefaultWorkingDirectory)/policy/custom/assignments/
+        inlineScript: |
+          $(var-bashPreInjectScript)
+          for defSet in `ls | cut -d "." -f 1`
+          do
+            for scopes in `cat $(System.DefaultWorkingDirectory)/$(customPolicyPathFromRoot)/assignments/$defSet.parameters.json | jq -r '.parameters.policyAssignmentManagementGroupId.value[]'`
+            do
+              echo "Validating templates for Policy Assignment $defSet in scope $scopes"
+              az deployment mg validate --management-group-id $scopes --location $(deploymentRegion) --name 'validate-custom-policy-set-definition-template' --template-file $defSet.bicep --parameters $(System.DefaultWorkingDirectory)/$(customPolicyPathFromRoot)/assignments/$defSet.parameters.json --parameters mgid=$scopes
+            done
+          done
+          $(var-bashPostInjectScript)
+    - task: AzureCLI@2
+      displayName: 'Get Bicep Main Template Deployment What-If Result'
+      inputs:
+        azureSubscription: $(serviceConnection)
+        scriptType: bash
+        scriptLocation: inlineScript
+        workingDirectory: $(System.DefaultWorkingDirectory)/policy/custom/assignments/
+        inlineScript: |
+          $(var-bashPreInjectScript)
+          for defSet in `ls | cut -d "." -f 1`
+          do
+            for scopes in `cat $(System.DefaultWorkingDirectory)/$(customPolicyPathFromRoot)/assignments/$defSet.parameters.json | jq -r '.parameters.policyAssignmentManagementGroupId.value[]'`
+            do
+              echo "Getting What-If result for for Policy Assignment $defSet in scope $scopes"
+              az deployment mg what-if --management-group-id $scopes --location $(deploymentRegion) --name 'whatif-custom-policy-set-definition-template' --template-file $defSet.bicep --parameters $(System.DefaultWorkingDirectory)/$(customPolicyPathFromRoot)/assignments/$defSet.parameters.json --parameters mgid=$scopes
+            done
+          done
+          $(var-bashPostInjectScript)
+    - task: AzureCLI@2
+      displayName: Assign Custom Policy
+      inputs:
+        azureSubscription: $(serviceConnection)
+        scriptType: bash
+        scriptLocation: inlineScript
+        workingDirectory: $(System.DefaultWorkingDirectory)/policy/custom/assignments/
+        inlineScript: |
+          $(var-bashPreInjectScript)
+          for defSet in `ls | cut -d "." -f 1`
+          do
+            for scopes in `cat $(System.DefaultWorkingDirectory)/$(customPolicyPathFromRoot)/assignments/$defSet.parameters.json | jq -r '.parameters.policyAssignmentManagementGroupId.value[]'`
+            do
+              echo "Custom Policy Assignment $defSet in scope $scopes"
+              az deployment mg create --management-group-id $scopes --location $(deploymentRegion) --name 'deploy-custom-policy-set-definition' --template-file $defSet.bicep --parameters $(System.DefaultWorkingDirectory)/$(customPolicyPathFromRoot)/assignments/$defSet.parameters.json --parameters mgid=$scopes
+            done
+          done
+          $(var-bashPostInjectScript)

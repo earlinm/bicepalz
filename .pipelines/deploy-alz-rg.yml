@@ -1,0 +1,74 @@
+trigger: none
+
+pr: none
+
+parameters:
+  - name: env
+    type: string
+    values:
+      - Dev
+      - QA
+      - Prod
+      - Hub
+      - DataMgt
+
+variables:
+- template: ../config/common/common.yml
+
+stages:
+
+- stage: ValidateRG
+  displayName: Validate Resource Groups
+
+  jobs:
+  - job: Bicep_Validation
+    displayName: Bicep Deployment Validation
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: AzureCLI@2
+      displayName: 'Bicep Main Templates Validation'
+      inputs:
+        azureSubscription: $(serviceConnection)
+        scriptType: bash
+        scriptLocation: inlineScript
+        workingDirectory: $(System.DefaultWorkingDirectory)/landingzone/
+        inlineScript: |
+          $(var-bashPreInjectScript)
+          echo "Validating templates for Landing Zone Resource Group Deployment - ${{ parameters.env }}"
+          az deployment sub validate --location $(deploymentRegion) --name 'validate-alz-rg-template' --template-file resource-groups.bicep --parameters $(System.DefaultWorkingDirectory)/$(rgPathFromRoot)/${{ parameters.env }}/rg.parameters.json
+          $(var-bashPostInjectScript)
+    - task: AzureCLI@2
+      displayName: 'Get Bicep Main Template Deployment What-If Result'
+      inputs:
+        azureSubscription: $(serviceConnection)
+        scriptType: bash
+        scriptLocation: inlineScript
+        workingDirectory: $(System.DefaultWorkingDirectory)/landingzone/
+        inlineScript: |
+          $(var-bashPreInjectScript)
+          echo "Getting What-If result for Landing Zone RG Deployment - ${{ parameters.env }}"
+          az deployment sub  what-if --location $(deploymentRegion) --name 'whatif-result-alz-rg-template' --template-file resource-groups.bicep --parameters $(System.DefaultWorkingDirectory)/$(rgPathFromRoot)/${{ parameters.env }}/rg.parameters.json
+          $(var-bashPostInjectScript)
+
+- stage: DeployRG
+  displayName: Deploy Resource Groups
+
+  jobs:
+  - job: DeployRGInTheEnvironment
+    displayName: Deploy Resource Groups in the Environment
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: AzureCLI@2
+      displayName:  Deploy Resource Groups
+      inputs:
+        azureSubscription: $(serviceConnection)
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
+        workingDirectory: $(System.DefaultWorkingDirectory)/landingzone/
+        inlineScript: |
+          $(var-bashPreInjectScript)
+          echo "Deploying VNET Resources for Landing Zone - ${{ parameters.env }}"
+          az deployment sub  create --location $(deploymentRegion) --name 'deploy-alz-rg' --template-file resource-groups.bicep --parameters $(System.DefaultWorkingDirectory)/$(rgPathFromRoot)/${{ parameters.env }}/rg.parameters.json
+          $(var-bashPostInjectScript)

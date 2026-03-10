@@ -1,0 +1,46 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "dataShares": {
+            "value": [
+                {
+                    "subscriptionId": "aa50fb39-d6c4-4284-b776-5b8836667893",
+                    "rgName": "maz-cac-prd-rba-rg",
+                    "accountName": "cacprdrbdshare01",
+                    "location": "canadacentral",
+                    "shares": [
+                        {
+                            "shareName": "maz-cac-prd-ds-01",
+                            "description": "This is Prod Data Share 01",
+                            "kind": "CopyBased"
+                        },
+                        {
+                            "shareName": "maz-cac-prd-ds-02",
+                            "description": "This is Prod Data Share 02",
+                            "kind": "InPlace"
+                        }
+                    ]
+                },
+                {
+                    "subscriptionId": "aa50fb39-d6c4-4284-b776-5b8836667893",
+                    "rgName": "maz-cac-prd-rba-rg",
+                    "accountName": "cacprdrbdshare02",
+                    "location": "canadacentral",
+                    "shares": [
+                        {
+                            "shareName": "maz-cac-prd-ds-01",
+                            "description": "This is Prod Data Share 01",
+                            "kind": "CopyBased"
+                        },
+                        {
+                            "shareName": "maz-cac-prd-ds-02",
+                            "description": "This is Prod Data Share 02",
+                            "kind": "InPlace"
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}

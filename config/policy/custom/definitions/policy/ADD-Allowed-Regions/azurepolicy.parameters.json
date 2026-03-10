@@ -1,0 +1,23 @@
+{
+    "allowedRegions": {
+        "type": "Array",
+        "metadata": {
+            "displayName": "Allowed regions for Resources",
+            "description": "List of regions where resources are allowed"
+        }
+    },
+    "effect": {
+        "type": "String",
+        "metadata": {
+            "displayName": "Policy Effect",
+            "description": "The desired effect of the policy."
+        },
+        "allowedValues": [
+            "audit",
+            "Audit",
+            "deny",
+            "Deny"
+        ],
+        "defaultValue": "audit"
+    }
+}

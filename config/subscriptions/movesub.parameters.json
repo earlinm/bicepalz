@@ -1,0 +1,35 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "subs": {
+            "value": [
+                {
+                    "subscriptionId": "83028b4f-eeda-4a23-a815-b977a510fe09",
+                    "subscriptionName": "rb-datamgt",
+                    "targetMGid": "mg-sharedinfra"
+                },
+                {
+                    "subscriptionId": "6c2e916a-e8dd-493e-87cc-43ad20cdd758",
+                    "subscriptionName": "rb-platform",
+                    "targetMGid": "mg-sharedinfra"
+                },
+                {
+                    "subscriptionId": "bbb4cbb5-dc1f-4b45-a91e-e45db2c97ed2",
+                    "subscriptionName": "rogersbank-dev",
+                    "targetMGid": "mg-analytics-npe"
+                },
+                {
+                    "subscriptionId": "aa50fb39-d6c4-4284-b776-5b8836667893",
+                    "subscriptionName": "rogersbank-prd",
+                    "targetMGid": "mg-analytics-prod"
+                },
+                {
+                    "subscriptionId": "3206b5bf-87f7-44f3-b055-a2d770947d2a",
+                    "subscriptionName": "rogersbank-qa",
+                    "targetMGid": "mg-analytics-npe"
+                }
+            ]
+        }
+    }
+}

@@ -1,0 +1,23 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "resourceGroups": {
+            "value": [
+                {
+                    "name": "maz-cac-data-vm-rg",
+                    "subscriptionId": "83028b4f-eeda-4a23-a815-b977a510fe09",
+                    "rgLocation": "canadacentral",
+                    "tags": {
+                        "Region": "canadacentral",
+                        "Environment": "DataMgt",
+                        "ResourceType": "Virtual Networks",
+                        "ManagedBy": "Adastra Managed Services"
+                    }
+                }
+
+                
+                ]
+        }
+    }
+}

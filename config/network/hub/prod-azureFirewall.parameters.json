@@ -1,0 +1,53 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "commonValues": {
+      "value": {
+        "subscriptionId": "40d16bb2-bcd6-4723-8749-ba2b0899f18a",
+        "subscriptionName": "Pay-As-You-Go",
+        "rgName": "maz-cac-hub-rg",
+        "rgLocation": "canadacentral"
+      }
+    },
+    "firewall": {
+      "value": {
+        "publicIp": {
+          "name": "RBAFWPublicIp-Prod",
+          "sku": {
+            "name": "Standard",
+            "tier": "Regional"
+          },
+          "properties": {
+            "publicIPAddressVersion": "IPv4",
+            "publicIPAllocationMethod": "Static"
+          }
+        },
+        "policy": {
+          "name": "RBAFWPolicy-Prod",
+          "properties": {
+            "sku": {
+              "tier": "Standard"
+            },
+            "dnsSettings": {
+              "enableProxy": true
+            }
+          }
+        },
+        "firewall": {
+          "name": "RBAFW-Prod",
+          "sku": {
+            "name": "AZFW_VNet",
+            "tier": "Standard"
+          },
+          "hubIPAddresses": {
+            "privateIPAddress": "10.0.1.10"
+          },
+          "ipConfigname": "firewallIPconfig",
+          "subnetId": "/subscriptions/40d16bb2-bcd6-4723-8749-ba2b0899f18a/resourceGroups/maz-cac-hub-rg/providers/Microsoft.Network/virtualNetworks/vnet-rba-hub-prod-001/subnets/AzureFirewallSubnet",
+          "collectionName": "AzureFirewallCollectionProd"
+        }
+      }
+    }
+  }
+}

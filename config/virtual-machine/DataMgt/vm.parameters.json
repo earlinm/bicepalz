@@ -1,0 +1,92 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "virtualMachines": {
+            "value": [
+                {
+                    "subscriptionId": "83028b4f-eeda-4a23-a815-b977a510fe09",
+                    "rgName": "maz-cac-data-vm-rg",
+                    "location": "canadacentral",
+                    "tags":{
+                        "Region": "canadacentral",
+                        "Environment": "DataMgt",
+                        "ResourceType": "Virtual Machine",
+                        "ManagedBy": "Adastra Managed Services"
+                    },
+                    "vnetRGname": "maz-cac-data-spk01-rg",
+                    "virtualNetworkName": "cac-npe-data-rb-vnet",
+                    "subnetName": "snet-data-app", 
+                    "nicName": "cicd-npe-mgmt-nic",
+                    "vmName": "cicd-npe-mgmt",
+                    "vmSize": "Standard_D2s_v3",
+                    "osVersion": "2022-datacenter-azure-edition",
+                    "saType": "StandardSSD_LRS",
+                    "dataDiskName": "cicd-npe-mgmt-disk"
+                },
+                {
+                    "subscriptionId": "83028b4f-eeda-4a23-a815-b977a510fe09",
+                    "rgName": "maz-cac-data-vm-rg",
+                    "location": "canadacentral",
+                    "tags":{
+                        "Region": "canadacentral",
+                        "Environment": "DataMgt",
+                        "ResourceType": "Virtual Machine",
+                        "ManagedBy": "Adastra Managed Services"
+                    },
+                    "vnetRGname": "maz-cac-data-spk01-rg",
+                    "virtualNetworkName": "cac-prd-data-rb-vnet",
+                    "subnetName": "snet-data-app", 
+                    "nicName": "cicd-prd-mgmt-nic",
+                    "vmName": "cicd-prd-mgmt",
+                    "vmSize": "Standard_D2s_v3",
+                    "osVersion": "2022-datacenter-azure-edition",
+                    "saType": "StandardSSD_LRS",
+                    "dataDiskName": "cicd-prd-mgmt-disk"
+                },
+                {
+                    "subscriptionId": "83028b4f-eeda-4a23-a815-b977a510fe09",
+                    "rgName": "maz-cac-data-vm-rg",
+                    "location": "canadacentral",
+                    "tags":{
+                        "Region": "canadacentral",
+                        "Environment": "DataMgt",
+                        "ResourceType": "Virtual Machine",
+                        "ManagedBy": "Adastra Managed Services"
+                    },
+                    "vnetRGname": "maz-cac-data-spk01-rg",
+                    "virtualNetworkName": "cac-npe-data-rb-vnet",
+                    "subnetName": "snet-data-app",
+                    "nicName": "pbigw-npe-mgmt-nic",
+                    "vmName": "pbigw-npe-mgmt",
+                    "vmSize": "Standard_D2s_v3",
+                    "osVersion": "2022-datacenter-azure-edition",
+                    "saType": "StandardSSD_LRS",
+                    "dataDiskName": "pbigw-npe-mgmt-disk"
+                },
+                {
+                    "subscriptionId": "83028b4f-eeda-4a23-a815-b977a510fe09",
+                    "rgName": "maz-cac-data-vm-rg",
+                    "location": "canadacentral",
+                    "tags":{
+                        "Region": "canadacentral",
+                        "Environment": "DataMgt",
+                        "ResourceType": "Virtual Machine",
+                        "ManagedBy": "Adastra Managed Services"
+                    },
+                    "vnetRGname": "maz-cac-data-spk01-rg",
+                    "virtualNetworkName": "cac-prd-data-rb-vnet",
+                    "subnetName": "snet-data-app",
+                    "nicName": "pbigw-prd-mgmt-nic",
+                    "vmName": "pbigw-prd-mgmt",
+                    "vmSize": "Standard_D2s_v3",
+                    "osVersion": "2022-datacenter-azure-edition",
+                    "saType": "StandardSSD_LRS",
+                    "dataDiskName": "pbigw-prd-mgmt-disk"
+                }
+                
+
+            ]
+        }
+    }
+}

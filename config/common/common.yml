@@ -1,0 +1,24 @@
+
+variables:
+  deploymentRegion: canadacentral
+  serviceConnection: MyNewServiceConnection
+
+  vmImage: ubuntu-latest
+  deployOperation: create  # valid options: 'create', 'what-if'
+
+  managementGroupPathFromRoot: 'config/management-groups'
+  roleAssignmentPathFromRoot: 'config/role-assignments'
+  subscriptionPathFromRoot: 'config/subscriptions'
+  customPolicyPathFromRoot: 'config/policy/custom'
+  networkPathFromRoot: 'config/network'
+  logAnalyticSolutionsPathFromRoot: 'config/diagnostics'
+  rbacPathFromRoot: 'config/rbac'
+  rgPathFromRoot: 'config/resource-group'
+  dsPathFromRoot: 'config/data-share'
+  saPathFromRoot: 'config/storage-accounts'
+  synapsePathFromRoot: 'config/synapse'
+  vmPathFromRoot: 'config/virtual-machine'
+  kvPathFromRoot: 'config/key-vault'
+
+  var-bashPreInjectScript: 'set -E; function catch { echo "##vso[task.logissue type=error]Caller: $(caller), LineNo: $LINENO, Command: $BASH_COMMAND" ; exit 1 ; } ; echo ; echo "Current working directory: $(pwd)" ; echo ; trap catch ERR'
+  var-bashPostInjectScript: ':'

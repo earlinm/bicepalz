@@ -1,0 +1,58 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "firstLevelMGs": {
+            "value": [
+                {
+                    "id": "mg-fairstonebank",
+                    "displayName": "Fairstone Bank",
+                    "parentId": "9f698540-516b-4bd9-a37a-2682d93a5442"
+                },
+                {
+                    "id": "mg-legacy",
+                    "displayName": "Legacy Infra",
+                    "parentId": "9f698540-516b-4bd9-a37a-2682d93a5442"
+                }
+            ]
+        },
+        "secondLevelMGs": {
+            "value": [
+                {
+                    "id": "mg-alz",
+                    "displayName": "Landing Zones",
+                    "parentId": "mg-fairstonebank"
+                },
+                {
+                    "id": "mg-management",
+                    "displayName": "Management",
+                    "parentId": "mg-fairstonebank"
+                }
+                ]
+        },
+        "thirdLevelMGs": {
+            "value": [
+                {
+                    "id": "mg-production",
+                    "displayName": "Production",
+                    "parentId": "mg-alz"
+                },
+                {
+                    "id": "mg-uat",
+                    "displayName": "UAT",
+                    "parentId": "mg-alz"
+                },
+                {
+                    "id": "mg-qa",
+                    "displayName": "QA",
+                    "parentId": "mg-alz"
+                },
+                {
+                    "id": "mg-dev",
+                    "displayName": "DEV",
+                    "parentId": "mg-alz"
+                }                
+            ]
+        }
+    }
+}

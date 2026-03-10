@@ -1,0 +1,72 @@
+trigger: none
+
+pr: none
+
+parameters:
+  - name: env
+    type: string
+    values:
+      - Dev
+      - QA
+      - Prod
+
+variables:
+- template: ../config/common/common.yml
+
+stages:
+
+- stage: ValidateSA
+  displayName: Validate Storage Accounts
+
+  jobs:
+  - job: Bicep_Validation
+    displayName: Bicep Deployment Validation
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: AzureCLI@2
+      displayName: 'Bicep Main Templates Validation'
+      inputs:
+        azureSubscription: $(serviceConnection)
+        scriptType: bash
+        scriptLocation: inlineScript
+        workingDirectory: $(System.DefaultWorkingDirectory)/landingzone/
+        inlineScript: |
+          $(var-bashPreInjectScript)
+          echo "Validating templates for Landing Zone Storage Account Deployment - ${{ parameters.env }}"
+          az deployment sub validate --location $(deploymentRegion) --name 'validate-alz-sa-template' --template-file sa.bicep --parameters $(System.DefaultWorkingDirectory)/$(saPathFromRoot)/${{ parameters.env }}/sa.parameters.json
+          $(var-bashPostInjectScript)
+    - task: AzureCLI@2
+      displayName: 'Get Bicep Main Template Deployment What-If Result'
+      inputs:
+        azureSubscription: $(serviceConnection)
+        scriptType: bash
+        scriptLocation: inlineScript
+        workingDirectory: $(System.DefaultWorkingDirectory)/landingzone/
+        inlineScript: |
+          $(var-bashPreInjectScript)
+          echo "Getting What-If result for Landing Zone Storage Account Deployment - ${{ parameters.env }}"
+          az deployment sub  what-if --location $(deploymentRegion) --name 'whatif-result-alz-sa-template' --template-file sa.bicep --parameters $(System.DefaultWorkingDirectory)/$(saPathFromRoot)/${{ parameters.env }}/sa.parameters.json
+          $(var-bashPostInjectScript)
+
+- stage: DeploySA
+  displayName: Deploy Storage Accounts
+
+  jobs:
+  - job: DeploSASInTheEnvironment
+    displayName: Deploy Storage Accounts in the Environment
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: AzureCLI@2
+      displayName:  Deploy Storage Account
+      inputs:
+        azureSubscription: $(serviceConnection)
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
+        workingDirectory: $(System.DefaultWorkingDirectory)/landingzone/
+        inlineScript: |
+          $(var-bashPreInjectScript)
+          echo "Deploying Storage Account Resources for Landing Zone - ${{ parameters.env }}"
+          az deployment sub  create --location $(deploymentRegion) --name 'deploy-alz-sa' --template-file sa.bicep --parameters $(System.DefaultWorkingDirectory)/$(saPathFromRoot)/${{ parameters.env }}/sa.parameters.json
+          $(var-bashPostInjectScript)

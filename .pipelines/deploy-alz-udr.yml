@@ -1,0 +1,103 @@
+trigger: none
+
+pr: none
+
+parameters:
+  - name: env
+    type: string
+    values:
+      - dev
+      - prod
+      - hub
+
+variables:
+- template: ../config/common/common.yml
+
+stages:
+
+- stage: ValidateUDRResources
+  displayName: Validate User Defined Routes
+
+  jobs:
+  - job: Bicep_Validation
+    displayName: Bicep Deployment Validation
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: AzureCLI@2
+      displayName: 'Bicep Main Templates Validation'
+      inputs:
+        azureSubscription: $(serviceConnection)
+        scriptType: bash
+        scriptLocation: inlineScript
+        workingDirectory: $(System.DefaultWorkingDirectory)/landingzone/
+        inlineScript: |
+          $(var-bashPreInjectScript)
+          echo "Validating templates for UDR - ${{ parameters.env }}"
+          az deployment sub validate --location $(deploymentRegion) --name 'validate-alz-udr-template' --template-file udrs.bicep --parameters $(System.DefaultWorkingDirectory)/$(networkPathFromRoot)/${{ parameters.env }}/udr.parameters.json
+          $(var-bashPostInjectScript)
+    - task: AzureCLI@2
+      displayName: 'Get Bicep Main Template Deployment What-If Result'
+      inputs:
+        azureSubscription: $(serviceConnection)
+        scriptType: bash
+        scriptLocation: inlineScript
+        workingDirectory: $(System.DefaultWorkingDirectory)/landingzone/
+        inlineScript: |
+          $(var-bashPreInjectScript)
+          echo "Getting What-If result for UDR - ${{ parameters.env }}"
+          az deployment sub  what-if --location $(deploymentRegion) --name 'whatif-result-alz-udr-template' --template-file udrs.bicep --parameters $(System.DefaultWorkingDirectory)/$(networkPathFromRoot)/${{ parameters.env }}/udr.parameters.json
+          $(var-bashPostInjectScript)
+
+- stage: DeployUDRResources
+  displayName: Deploy User Defined Routes Resources
+
+  jobs:
+  - job: DeployUDRResourcesInTheEnvironment
+    displayName: Deploy User Defined Routes in the Environment
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: AzureCLI@2
+      displayName:  Deploy User Defined Routes
+      inputs:
+        azureSubscription: $(serviceConnection)
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
+        workingDirectory: $(System.DefaultWorkingDirectory)/landingzone/
+        inlineScript: |
+          $(var-bashPreInjectScript)
+          echo "Deploying UDR - ${{ parameters.env }}"
+          az deployment sub  create --location $(deploymentRegion) --name 'deploy-alz-udr' --template-file udrs.bicep --parameters $(System.DefaultWorkingDirectory)/$(networkPathFromRoot)/${{ parameters.env }}/udr.parameters.json
+          $(var-bashPostInjectScript)
+
+- stage: AssociateRouteTableToSubnet
+  displayName: Associate Route Table to Subnet
+
+  jobs:
+  - job: AssociateSubnetandUDR
+    displayName: Route Table Subnet Association
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: AzureCLI@2
+      displayName:  Associate User Defined Routes to Subnets
+      inputs:
+        azureSubscription: $(serviceConnection)
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
+        workingDirectory: $(System.DefaultWorkingDirectory)/$(networkPathFromRoot)/${{ parameters.env }}/
+        inlineScript: |
+          $(var-bashPreInjectScript)
+          udrs=`cat udr.parameters.json | jq -r '.parameters.udrs.value'`
+          for row in $(echo "${udrs}" | jq -c '.[]')
+          do
+            _jq() {
+            echo "${row}" | jq -r "${1}"
+            }
+            export subscriptionId=`cat udr.parameters.json | jq -r '.parameters.commonValues.value.subscriptionId'`
+            export rgName=`cat udr.parameters.json | jq -r '.parameters.commonValues.value.rgName'`
+            echo "Associating $(_jq ".udrName") to $(_jq ".subnetName") for ${{ parameters.env }} environment in $rgName Resource Group at $subscriptionId subscription"
+            az network vnet subnet update --subscription $subscriptionId --resource-group $rgName --vnet-name $(_jq ".vnetName") --name $(_jq ".subnetName") --route-table $(_jq ".udrName")
+          done
+          $(var-bashPostInjectScript)

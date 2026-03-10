@@ -1,0 +1,38 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "commonValues": {
+            "value": {
+                "subscriptionId": "6c2e916a-e8dd-493e-87cc-43ad20cdd758",
+                "subscriptionName": "rb-platform",
+                "rgName": "maz-cac-hub-rg",
+                "rgLocation": "canadacentral"
+            }
+        },
+        "vpnGateway": {
+            "value": {
+                "name": "vpn-gateway-nonprod",
+                "sku": {
+                    "name": "Standard",
+                    "tier": "Standard"
+                },
+                "gatewayType": "ExpressRoute",
+                "enableBgp": false,
+                "vpnType": "PolicyBased",
+                "publicIp": {
+                    "name": "RBAVpnGWNonProdPublicIp",
+                    "sku": {
+                        "name": "Standard",
+                        "tier": "Regional"
+                    },
+                    "properties": {
+                        "publicIPAddressVersion": "IPv4",
+                        "publicIPAllocationMethod": "Static"
+                    }
+                },
+                "vnetName": "cac-npe-rb-vnet-hub"
+            }
+        }
+    }
+}

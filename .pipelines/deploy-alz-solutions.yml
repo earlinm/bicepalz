@@ -1,0 +1,64 @@
+trigger: none
+
+pr: none
+
+variables:
+- template: ../config/common/common.yml
+
+stages:
+
+- stage: ValidateSolutionResources
+  displayName: Validate Azure Solutions
+
+  jobs:
+  - job: Bicep_Validation
+    displayName: Bicep Deployment Validation
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: AzureCLI@2
+      displayName: 'Bicep Main Templates Validation'
+      inputs:
+        azureSubscription: $(serviceConnection)
+        scriptType: bash
+        scriptLocation: inlineScript
+        workingDirectory: $(System.DefaultWorkingDirectory)/landingzone/
+        inlineScript: |
+          $(var-bashPreInjectScript)
+          echo "Validating templates for Landing Zone Log Analytics Solutions Deployment - ${{ parameters.env }}"
+          az deployment sub validate --location $(deploymentRegion) --name 'validate-alz-solutions-template' --template-file solutions.bicep --parameters $(System.DefaultWorkingDirectory)/$(logAnalyticSolutionsPathFromRoot)/${{ parameters.env }}/solutions.parameters.json
+          $(var-bashPostInjectScript)
+    - task: AzureCLI@2
+      displayName: 'Get Bicep Main Template Deployment What-If Result'
+      inputs:
+        azureSubscription: $(serviceConnection)
+        scriptType: bash
+        scriptLocation: inlineScript
+        workingDirectory: $(System.DefaultWorkingDirectory)/landingzone/
+        inlineScript: |
+          $(var-bashPreInjectScript)
+          echo "Getting What-If result for Landing Zone Log Analytics Solutions Deployment - ${{ parameters.env }}"
+          az deployment sub  what-if --location $(deploymentRegion) --name 'whatif-result-alz-solutions-template' --template-file solutions.bicep --parameters $(System.DefaultWorkingDirectory)/$(logAnalyticSolutionsPathFromRoot)/${{ parameters.env }}/solutions.parameters.json
+          $(var-bashPostInjectScript)
+
+- stage: DeploySolutionsResources
+  displayName: Deploy Azure Solutions Resources
+
+  jobs:
+  - job: DeployAzureSolutionsInTheEnvironment
+    displayName: Deploy Log Analytics Solutions in the Environment
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: AzureCLI@2
+      displayName:  Deploy Azure Solutions for Log Analytics
+      inputs:
+        azureSubscription: $(serviceConnection)
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
+        workingDirectory: $(System.DefaultWorkingDirectory)/landingzone/
+        inlineScript: |
+          $(var-bashPreInjectScript)
+          echo "Deploying Solutions Resources for Landing Zone - ${{ parameters.env }}"
+          az deployment sub  create --location $(deploymentRegion) --name 'deploy-alz-solutions' --template-file solutions.bicep --parameters $(System.DefaultWorkingDirectory)/$(logAnalyticSolutionsPathFromRoot)/${{ parameters.env }}/solutions.parameters.json
+          $(var-bashPostInjectScript)

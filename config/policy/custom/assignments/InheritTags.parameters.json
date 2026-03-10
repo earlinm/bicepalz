@@ -1,0 +1,26 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "value": "canadacentral"
+        },
+        "policyAssignmentManagementGroupId": {
+            "value": [
+                 "mg-rogersbank"
+            ]
+        },
+        "enforcementMode": {
+            "value": "Default"
+        },
+        "policyDefinitionName": {
+            "value": "Inherit-Tag-From-ResourceGroup"
+        },
+        "policyAssignmentName": {
+            "value": "Inherit-Tags-from-RG"
+        },
+        "policyAssignmentDisplayName": {
+            "value": "Inherit Missing Tags from resource groups"
+        }
+    }
+}

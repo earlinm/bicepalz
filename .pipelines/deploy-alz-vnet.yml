@@ -1,0 +1,74 @@
+trigger: none
+
+pr: none
+
+parameters:
+  - name: env
+    type: string
+    values:
+      - dev
+      - prod
+      - hub
+      - qa
+      - datamgt
+
+variables:
+- template: ../config/common/common.yml
+
+stages:
+
+- stage: ValidateVNETResources
+  displayName: Validate VNET and Subnet
+
+  jobs:
+  - job: Bicep_Validation
+    displayName: Bicep Deployment Validation
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: AzureCLI@2
+      displayName: 'Bicep Main Templates Validation'
+      inputs:
+        azureSubscription: $(serviceConnection)
+        scriptType: bash
+        scriptLocation: inlineScript
+        workingDirectory: $(System.DefaultWorkingDirectory)/landingzone/
+        inlineScript: |
+          $(var-bashPreInjectScript)
+          echo "Validating templates for Landing Zone VNET Deployment - ${{ parameters.env }}"
+          az deployment sub validate --location $(deploymentRegion) --name 'validate-alz-network-template' --template-file vnets.bicep --parameters $(System.DefaultWorkingDirectory)/$(networkPathFromRoot)/${{ parameters.env }}/vnet.parameters.json
+          $(var-bashPostInjectScript)
+    - task: AzureCLI@2
+      displayName: 'Get Bicep Main Template Deployment What-If Result'
+      inputs:
+        azureSubscription: $(serviceConnection)
+        scriptType: bash
+        scriptLocation: inlineScript
+        workingDirectory: $(System.DefaultWorkingDirectory)/landingzone/
+        inlineScript: |
+          $(var-bashPreInjectScript)
+          echo "Getting What-If result for Landing Zone VNET Deployment - ${{ parameters.env }}"
+          az deployment sub  what-if --location $(deploymentRegion) --name 'whatif-result-alz-network-template' --template-file vnets.bicep --parameters $(System.DefaultWorkingDirectory)/$(networkPathFromRoot)/${{ parameters.env }}/vnet.parameters.json
+          $(var-bashPostInjectScript)
+
+- stage: DeployVNETResources
+  displayName: Deploy VNET Resources
+
+  jobs:
+  - job: DeployVNETResourcesInTheEnvironment
+    displayName: Deploy VNET and Subnet in the Environment
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: AzureCLI@2
+      displayName:  Deploy VNET and Subnet
+      inputs:
+        azureSubscription: $(serviceConnection)
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
+        workingDirectory: $(System.DefaultWorkingDirectory)/landingzone/
+        inlineScript: |
+          $(var-bashPreInjectScript)
+          echo "Deploying VNET Resources for Landing Zone - ${{ parameters.env }}"
+          az deployment sub  create --location $(deploymentRegion) --name 'deploy-alz-network' --template-file vnets.bicep --parameters $(System.DefaultWorkingDirectory)/$(networkPathFromRoot)/${{ parameters.env }}/vnet.parameters.json
+          $(var-bashPostInjectScript)

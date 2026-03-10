@@ -1,0 +1,50 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "commonValues": {
+            "value": {
+                "subscriptionId": "bbb4cbb5-dc1f-4b45-a91e-e45db2c97ed2",
+                "subscriptionName": "rogersbank-dev",
+                "rgName": "maz-cac-dev-spk01-rg",
+                "rgLocation": "canadacentral",
+                "tags": {
+                        "Region": "canadacentral",
+                        "Environment": "Dev",
+                        "ResourceType": "Virtual Networks",
+                        "ManagedBy": "Adastra Managed Services"
+                }
+            }
+        },
+          "vnets": {
+            "value": [
+                {
+                    "vnetName": "cac-dev-rb-vnet",
+                    "vnetAddress": "10.6.0.0/16",
+                    "enableDdosProtection": false,
+                    "subnets": [
+                        {
+                            "name": "snet-dev-web",
+                            "properties": {
+                                "addressPrefix": "10.6.0.0/24"
+                            }
+                        },
+                        {
+                            "name": "snet-dev-app",
+                            "properties": {
+                                "addressPrefix": "10.6.1.0/24"
+                            }
+                        },
+                        {
+                            "name": "snet-dev-db",
+                            "properties": {
+                                "addressPrefix": "10.6.2.0/24"
+                            }
+                        }
+                        
+                    ]
+                }
+            ]
+        }
+    }
+}

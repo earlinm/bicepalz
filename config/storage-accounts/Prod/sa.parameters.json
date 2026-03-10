@@ -1,0 +1,40 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "storageAccounts": {
+            "value": [
+                {
+                    "subscriptionId": "aa50fb39-d6c4-4284-b776-5b8836667893",
+                    "rgName": "maz-cac-prd-rba-rg",
+                    "name": "cacprdrbdlstraccext01",
+                    "location": "canadacentral",
+                    "sku": "Standard_GRS",
+                    "hnsEnabled": true,
+                    "sftpEnabled": true,
+                    "publicNetworkAccess": "Disabled"
+                },
+                {
+                    "subscriptionId": "aa50fb39-d6c4-4284-b776-5b8836667893",
+                    "rgName": "maz-cac-prd-rba-rg",
+                    "name": "cacprdrbdlstraccint01",
+                    "location": "canadacentral",
+                    "sku": "Standard_GRS",
+                    "hnsEnabled": true,
+                    "sftpEnabled": false,
+                    "publicNetworkAccess": "Disabled"
+                },
+                {
+                    "subscriptionId": "aa50fb39-d6c4-4284-b776-5b8836667893",
+                    "rgName": "maz-cac-prd-rba-rg",
+                    "name": "cacprdrbdlstraccsyn01",
+                    "location": "canadacentral",
+                    "sku": "Standard_GRS",
+                    "hnsEnabled": true,
+                    "sftpEnabled": false,
+                    "publicNetworkAccess": "Disabled"
+                }
+            ]
+        }
+    }
+}
